@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  osint-tool:
+    image: atomux/osint-tool:latest
+    container_name: osint-tool
+    restart: unless-stopped
+    expose:
+      - "5000"
+
+  caddy:
+    image: caddy:latest
+    container_name: osint-tool-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - osint-tool

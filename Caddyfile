@@ -1,0 +1,5 @@
+:80
+
+route {
+    reverse_proxy osint-tool:5000
+}

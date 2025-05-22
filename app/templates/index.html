@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Domeno OSINT analizatorius</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Domeno analizės įrankis</h1>
+
+    <div>
+        <p>
+            <strong>Informacija:</strong><br>
+            OSINT analizatorius skirtas analizuoti domeną DNS, WHOIS ir SSL sertifikatų duomenimis.
+        </p>
+    </div>
+
+    <form method="get" action="/">
+        <input type="text" name="domain" placeholder="Įveskite domeną" required>
+        <button type="submit">Analizuoti</button>
+    </form>
+
+    {% if result %}
+    <div>
+        <h2>Domeno {{ domain }} analizės rezultatai: </h2>
+        <p><strong>Analizės laikas:</strong> {{ check_time }}</p>
+
+        {% if result.dns.error or result.ssl.error or result.whois.error %}
+            <p style="color: red;">⚠️ Analizė su klaidomis.</p>
+        {% else %}
+            <p style="color: green;">✅ Analizė atlikta sėkmingai.</p>
+        {% endif %}
+
+        <h3>DNS informacija:</h3>
+        <pre>{{ result.dns | tojson(indent=2) }}</pre>
+
+        <h3>WHOIS informacija:</h3>
+        <pre>{{ result.whois | tojson(indent=2) }}</pre>
+
+        <h3>SSL sertifikato informacija:</h3>
+        <pre>{{ result.ssl | tojson(indent=2) }}</pre>
+    </div>
+    {% endif %}
+</body>
+</html>
